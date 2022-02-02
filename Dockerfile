@@ -1,11 +1,15 @@
-FROM debian:bullseye-slim
+FROM ubuntu:focal
 LABEL maintainer="Irish1986@Github"
 
+RUN apt-get -y update \
+    && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends \
+         apt-cacher-ng \
+    && echo "Cleaning up" \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
 VOLUME ["/var/cache/apt-cacher-ng"]
-RUN apt-get update &&\
-    apt-get install --no-install-recommends -y\
-         apt-cacher-ng &&\
-    rm -rf /var/lib/apt/lists/*
 
 EXPOSE 3142
 CMD chmod 777 /var/cache/apt-cacher-ng && \
